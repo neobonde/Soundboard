@@ -1,0 +1,47 @@
+<html>
+   <body>
+
+    <h1>Effect Player</h1>
+
+    <h2>Play effects</h2>
+    <style>
+        .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }
+    </style>
+
+    <iframe name="hiddenFrame" class="hide"></iframe>
+
+    <form action="/play" method="post" target="hiddenFrame">
+        <label for="volume" >Volume:</label>
+        <br>
+        <input name="volume" type="range" min="1" max="50" value="5"><br><br>
+        {% for effect in effects %}
+            <button name="sound", value="{{effect}}">{{effect}}</button>
+            <!-- <button name="sound" value="{{ Effect }}">{{ Effect }}</button> -->
+        {% endfor %}
+    </form>
+
+    <form action='/stop' method="post" target="hiddenFrame">
+        <button >Stop</button>
+    </form>
+    <br>
+    <form action='/tv_on' method="post" target="hiddenFrame">
+        <button >TV On</button>
+    </form>
+
+    <form action='/tv_off' method="post" target="hiddenFrame">
+        <button >TV Off</button>
+    </form>
+
+
+    <h2>Upload new effect</h2>
+    <p>Effect player only supports audio files of the .ogg format</p>
+    <form action='upload' method=post enctype=multipart/form-data>
+        <input type=file name=file accept=".ogg">
+        <input type=submit value=Upload>
+    </form>
+
+    <h2>API</h2>
+    <p>Coming soon</p>
+
+   </body>
+</html>
