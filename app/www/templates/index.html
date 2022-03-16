@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Embedded Soundboard</title>
+   <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+   <div style="float:right">
+      <form action='/api/v1/tv_on' method="post" target="hiddenFrame">
+         <button >TV On</button>
+     </form>
+
+     <form action='/api/v1/tv_off' method="post" target="hiddenFrame">
+         <button >TV Off</button>
+     </form>
+   </div>
+   <h2>Embedded Soundboard</h2>
+   <p>Click to play, click again to stop playing</p>
+   <form action='/api/v1/stop' method="post" target="hiddenFrame">
+      <button >Stop All</button>
+  </form>
+
+  <div id="modal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+         <span class="close">&times;</span>
+
+         <h2>Upload new effect</h2>
+         <p>Effect player only supports audio files of the .ogg format</p>
+         <form action='api/v1/upload' method=post enctype=multipart/form-data>
+            <label for="name" >Effect name:</label>
+            <br>
+            <input type="text" name="name">
+            <br>
+            <br>
+            <input type=file name=file accept=".ogg">
+            <input id="modalSubmit" type=submit value=Upload>
+         </form>
+      </div>
+   </div>
+
+   <iframe name="hiddenFrame" class="hide"></iframe>
+
+   <form action="/api/v1/play" method="post" target="hiddenFrame">
+   <label for="volume" >Volume:</label>
+   <br>
+   <input name="volume" type="range" min="1" max="50" value="5"><br><br>
+      <div class="row">
+         {% for effect in effects %}
+            <button class="column" name="sound" value="{{effect}}">
+               <div class="card button">
+               <img src="static/img/waveform_default.png" alt="" width="150px" height="auto">
+               <p>{{effect}}</p>
+               </div>
+            </button>
+            <!-- <button name="sound" value="{{ Effect }}">{{ Effect }}</button> -->
+         {% endfor %}
+         <div id="modalActivator" class="column" name="sound" value="{{effect}}">
+            <div class="card button">
+            <h1 style="padding: 4px; color:#d94747">+</h1>
+            <p>Add new effect</p>
+            </div>
+         </div>
+      </div>
+   </form>
+
+
+
+<script src="static/js/button.js"></script>
+<script src="static/js/modal.js"></script>
+</body>
+</html>
