@@ -33,7 +33,7 @@
          <form action='api/v1/upload' method=post enctype=multipart/form-data>
             <label for="name" >Effect name:</label>
             <br>
-            <input type="text" name="name">
+            <input type="text" name="title">
             <br>
             <br>
             <input type=file name=file accept=".ogg">
@@ -50,10 +50,10 @@
    <input name="volume" type="range" min="1" max="50" value="5"><br><br>
       <div class="row">
          {% for effect in effects %}
-            <button class="column" name="sound" value="{{effect}}">
+            <button class="column" name="sound" value="{{effect['sound_uri']}}">
                <div class="card button">
-               <img src="static/img/waveform_default.png" alt="" width="150px" height="auto">
-               <p>{{effect}}</p>
+               <img src="thumbnail/{{effect['thumb_uri']}}" alt="" width="150px" height="auto">
+               <p>{{effect['title']}}</p>
                </div>
             </button>
             <!-- <button name="sound" value="{{ Effect }}">{{ Effect }}</button> -->

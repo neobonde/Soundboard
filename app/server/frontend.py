@@ -1,7 +1,12 @@
-from flask import Blueprint, render_template, abort, send_from_directory, json
+from email.policy import default
+import sqlite3
+from flask import Blueprint, render_template, abort, send_from_directory, json, send_file
 from jinja2 import TemplateNotFound
-from os.path import join, splitext
-from .api.sound_api import get_files as get_effects
+from os.path import join, splitext, dirname, abspath, isfile
+from .api.sound_api import get_sounds
+import sqlite3
+
+thumb_dir = join(dirname(abspath(__file__)),"..\\database\\thumbnails\\")
 
 
 simple_page = Blueprint('simple_page', __name__, template_folder='../www/templates/', static_folder='../www/static/')
@@ -10,13 +15,19 @@ simple_page = Blueprint('simple_page', __name__, template_folder='../www/templat
 @simple_page.route('/<page>')
 def show(page):
     try:
-        effects_json, _ = get_effects()
-        effects = json.loads(effects_json)
-        effects = [splitext(x)[0] for x in effects]
-
+        effects, _ = get_sounds()
         return render_template(f'{page}.html',effects=effects)
     except TemplateNotFound:
         abort(404)
+
+@simple_page.route('/thumbnail/', defaults={'image':'default.png'})
+@simple_page.route('/thumbnail/<image>')
+def thumbnail(image):
+    thumbnail_file = join(thumb_dir,image)
+    if not isfile(thumbnail_file):
+        thumbnail_file = join(thumb_dir,"default.png")
+    return send_file(thumbnail_file, mimetype='image/png')
+
 
 @simple_page.route('/favicon.ico')
 def favicon():

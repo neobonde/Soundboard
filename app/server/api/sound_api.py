@@ -1,13 +1,15 @@
 from os import listdir, getcwd
 from os.path import join, isfile, abspath,dirname
-from flask import Blueprint, abort, json, request
+from flask import Blueprint, abort, json, request, send_file
 from pygame import mixer
+import sqlite3
+
 
 sound_api = Blueprint('sound_api', __name__)
 
-
-
 clips_dir = join(dirname(abspath(__file__)),"..\\..\\database\\sounds\\")
+db_file = join(dirname(abspath(__file__)),"..\\..\\database\\database.db")
+
 nextChannel = 0
 
 #Helper
@@ -16,11 +18,19 @@ def init_mixer():
         mixer.init()
         mixer.set_num_channels(10)
 
+def get_db_connection():
+    conn = sqlite3.connect(db_file)
+    conn.row_factory = sqlite3.Row
+    return conn
 
-@sound_api.route('/api/v1/get-files',methods=['GET'])
-def get_files():
-    files = [f for f in listdir(clips_dir) if isfile(join(clips_dir, f))]
-    return json.dumps(files), 201
+
+@sound_api.route('/api/v1/get-sounds',methods=['GET'])
+def get_sounds():
+    conn = get_db_connection()
+    sounds = conn.execute('SELECT * FROM sounds ORDER BY title ASC').fetchall()
+    conn.close()
+
+    return sounds, 201
 
 
 @sound_api.route('/api/v1/play',methods=['POST','GET'])
