@@ -12,6 +12,23 @@ thumb_dir = Path(dirname(abspath(__file__)),"../database/thumbnails/")
 
 simple_page = Blueprint('simple_page', __name__, template_folder='../www/templates/', static_folder='../www/static/')
 
+@simple_page.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+
+    print(r)
+    print("Hello headers")
+
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    # r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
+
 @simple_page.route('/', defaults={'page': 'index'})
 @simple_page.route('/<page>')
 def show(page):

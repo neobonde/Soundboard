@@ -4,8 +4,10 @@ from .api import sound_api, upload_api, tv_api, setTvSchedule
 # from .api import tv_api
 from flask import Flask
 
+
 def run():
     app = Flask(__name__, static_folder = '../database/thumbnails')
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
     app.register_blueprint(simple_page)
     app.register_blueprint(sound_api)

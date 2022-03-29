@@ -29,6 +29,22 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
+@sound_api.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+
+    print(r)
+    print("Hello headers")
+
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    # r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
 @sound_api.route('/api/v1/get-sounds',methods=['GET'])
 def get_sounds():
     conn = get_db_connection()

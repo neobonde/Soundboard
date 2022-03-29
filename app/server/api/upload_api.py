@@ -49,6 +49,22 @@ def generate_thumbnail(filename):
     print(thumb_dir,filename.split('.')[0])
     plt.savefig(join(thumb_dir,filename.split('.')[0]), bbox_inches=0, pad_inches=0, transparent=True)
 
+@upload_api.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+
+    print(r)
+    print("Hello headers")
+
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    # r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
 
 
 @upload_api.route('/api/v1/upload', methods=['POST'])
