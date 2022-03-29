@@ -5,8 +5,9 @@ from jinja2 import TemplateNotFound
 from os.path import join, splitext, dirname, abspath, isfile
 from .api.sound_api import get_sounds
 import sqlite3
+from pathlib import(Path)
 
-thumb_dir = join(dirname(abspath(__file__)),"..\\database\\thumbnails\\")
+thumb_dir = Path(dirname(abspath(__file__)),"../database/thumbnails/")
 
 
 simple_page = Blueprint('simple_page', __name__, template_folder='../www/templates/', static_folder='../www/static/')

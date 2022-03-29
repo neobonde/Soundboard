@@ -3,12 +3,12 @@ from os.path import join, isfile, abspath,dirname
 from flask import Blueprint, abort, json, request, send_file, jsonify
 from pygame import mixer
 import sqlite3
-
+from pathlib import Path
 
 sound_api = Blueprint('sound_api', __name__)
 
-clips_dir = join(dirname(abspath(__file__)),"..\\..\\database\\sounds\\")
-db_file = join(dirname(abspath(__file__)),"..\\..\\database\\database.db")
+clips_dir = Path(dirname(abspath(__file__)), "../../database/sounds/")
+db_file = Path(dirname(abspath(__file__)), "../../database/database.db")
 
 nextChannel = 0
 
@@ -41,6 +41,7 @@ def get_sounds():
 
 @sound_api.route('/api/v1/play',methods=['POST','GET'])
 def play():
+
     init_mixer()
     global nextChannel
     data = {}
@@ -73,11 +74,11 @@ def play():
         else:
             file += ".ogg" # Assume .ogg
 
-        if not isfile(clips_dir + file):
-            # print(clips_dir + file)
+        if not isfile(Path(clips_dir, file)):
+            print(Path(clips_dir, file))
             return json.dumps({"error": "File " + file + " not found"}), 404
 
-        sound = mixer.Sound(clips_dir + file)
+        sound = mixer.Sound(Path(clips_dir, file))
         mixer.Channel(nextChannel).play(sound)
         old_channel = nextChannel
         nextChannel = (nextChannel + 1) % 10

@@ -8,13 +8,13 @@ import wave
 from pydub import AudioSegment
 import sqlite3
 import uuid
+from pathlib import Path
+
 
 upload_api = Blueprint('upload_api', __name__)
-clips_dir = join(dirname(abspath(__file__)),"..\\..\\database\\sounds\\")
-thumb_dir = join(dirname(abspath(__file__)),"..\\..\\database\\thumbnails\\")
-db_file = join(dirname(abspath(__file__)),"..\\..\\database\\database.db")
-
-
+clips_dir = Path(dirname(abspath(__file__)),"../../database/sounds/")
+thumb_dir = Path(dirname(abspath(__file__)),"../../database/thumbnails/")
+db_file = Path(dirname(abspath(__file__)),"../../database/database.db")
 
 ALLOWED_EXTENSIONS = ['ogg']
 
@@ -147,8 +147,8 @@ def delete_sound():
         conn.close()
 
         try:
-            remove(clips_dir + soundUri)
-            remove(thumb_dir + thumbUri)
+            remove(Path(clips_dir, soundUri))
+            remove(Path(thumb_dir, thumbUri))
         except FileNotFoundError:
             # It is Ok if the files have already been deleted
             pass
