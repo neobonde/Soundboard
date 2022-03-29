@@ -14,4 +14,4 @@ def run():
 
     setTvSchedule(onTime="08:00", offTime="15:44", days=["monday", "tuesday", "wednesday", "thursday", "friday"])
 
-    app.run(host="0.0.0.0",port=8080,debug=True)
+    app.run(host="0.0.0.0",port=8080, threaded=True)
