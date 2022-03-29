@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <h4 class="modal-title">Rename <b>{{title}}</b></h4>
+  </div>
+  <div class="modal-body">
+    <div class="input-group">
+      <span class="input-group-text">New title</span>
+      <input type="text" class="form-control" [(ngModel)]="newTitle">
+    </div>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="activeModal.close('Cancel click')">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="onRename()">Rename</button>
+  </div>

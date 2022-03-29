@@ -1,0 +1,22 @@
+  <button matRipple class="m-1 card align-items-center text-dark bg-light btn-ripple" style="width: 164px;"
+    (click)="playSound()" (contextmenu)="onRightClick($event)">
+    <img src="./../thumbnail/{{thumbUri}}" class="card-img-top" alt="Waveform for sound {{title}}">
+    <div class="card-body p-1 d-flex">
+      <h6 class="card-title text-center m-auto">{{title}}</h6>
+    </div>
+  </button>
+
+
+  <div style="visibility: hidden; position: fixed;" [style.left]="menuTopLeftPosition.x"
+    [style.top]="menuTopLeftPosition.y" [matMenuTriggerFor]="contextMenu"></div>
+
+  <mat-menu #contextMenu="matMenu">
+    <button mat-menu-item (click)="openRenameModal()">
+      <mat-icon><i class="bi bi-pencil"></i></mat-icon>
+      Edit name
+    </button>
+    <button mat-menu-item (click)="openDeleteModal()">
+      <mat-icon><i class="bi bi-trash"></i></mat-icon>
+      Delete sound
+    </button>
+  </mat-menu>

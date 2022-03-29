@@ -1,6 +1,6 @@
 from os import listdir, getcwd
 from os.path import join, isfile, abspath,dirname
-from flask import Blueprint, abort, json, request, send_file
+from flask import Blueprint, abort, json, request, send_file, jsonify
 from pygame import mixer
 import sqlite3
 
@@ -23,14 +23,20 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
 @sound_api.route('/api/v1/get-sounds',methods=['GET'])
 def get_sounds():
     conn = get_db_connection()
+    conn.row_factory = dict_factory
     sounds = conn.execute('SELECT * FROM sounds ORDER BY title ASC').fetchall()
     conn.close()
 
-    return sounds, 201
+    return jsonify(sounds), 200
 
 
 @sound_api.route('/api/v1/play',methods=['POST','GET'])

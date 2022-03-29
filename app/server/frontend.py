@@ -1,6 +1,6 @@
 from email.policy import default
 import sqlite3
-from flask import Blueprint, render_template, abort, send_from_directory, json, send_file
+from flask import Blueprint, redirect, render_template, abort, send_from_directory, json, send_file, url_for
 from jinja2 import TemplateNotFound
 from os.path import join, splitext, dirname, abspath, isfile
 from .api.sound_api import get_sounds
@@ -20,6 +20,7 @@ def show(page):
     except TemplateNotFound:
         abort(404)
 
+
 @simple_page.route('/thumbnail/', defaults={'image':'default.png'})
 @simple_page.route('/thumbnail/<image>')
 def thumbnail(image):
@@ -28,7 +29,10 @@ def thumbnail(image):
         thumbnail_file = join(thumb_dir,"default.png")
     return send_file(thumbnail_file, mimetype='image/png')
 
+@simple_page.route('/static/')
+def static_redirect():
+    return redirect('/')
 
 @simple_page.route('/favicon.ico')
 def favicon():
-    return send_from_directory(join(simple_page.static_folder,'ico'),'favicon.ico',mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(simple_page.static_folder,'favicon.ico',mimetype='image/vnd.microsoft.icon')

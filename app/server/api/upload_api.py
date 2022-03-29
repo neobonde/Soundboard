@@ -1,4 +1,4 @@
-from os import listdir, getcwd
+from os import listdir, getcwd, remove
 from os.path import join, isfile, abspath,dirname
 from werkzeug.utils import secure_filename
 from flask import Blueprint, abort, json, request, redirect, flash, url_for
@@ -51,20 +51,20 @@ def generate_thumbnail(filename):
 
 
 
-@upload_api.route('/api/v1/upload', methods=['GET', 'POST'])
-def upload_file():
+@upload_api.route('/api/v1/upload', methods=['POST'])
+def upload_sound():
     if request.method == 'POST':
         title = request.form['title']
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
+            return {'response':'No file selected'}, 400
+
         file = request.files['file']
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+            return {'response':'No file selected'}, 400
+
         if file and allowed_file(file.filename):
             sound_uuid = uuid.uuid4().hex
             sound_uri = secure_filename(sound_uuid +'.'+ file.filename.rsplit('.', 1)[1].lower())
@@ -77,5 +77,84 @@ def upload_file():
             conn.commit()
             conn.close()
 
+        else:
+            return {'response':'Unsupported file format, only accepts .OGG'}, 415
+
+
             return redirect(url_for('upload_api.upload_file', name=sound_uri))
-    return redirect('/')
+    return '', 204
+
+@upload_api.route('/api/v1/rename', methods=['POST'])
+def rename_sound():
+    data = {}
+
+    try:
+        data = json.loads(request.data)
+    except Exception:
+        try:
+            data = request.form.to_dict(flat=True)
+        except:
+            return  {'response':"Request body or form missing"}, 400
+
+    soundId = None
+    newName = ""
+
+    if "sound" not in data:
+        return  {'response':"No sound specified to edit"}, 400
+    soundId = data["sound"]
+
+    if "new_name" not in data:
+        return  {'response':"No new name specified, cannot rename"}, 400
+    newName = data["new_name"]
+
+
+    conn = get_db_connection()
+    conn.execute(f"UPDATE sounds SET title = '{newName}' WHERE id={soundId}")
+    conn.commit()
+    conn.close()
+
+    return  {'response':'Sound renamed'}, 202
+
+
+@upload_api.route('/api/v1/delete', methods=['POST'])
+def delete_sound():
+    data = {}
+
+    try:
+        data = json.loads(request.data)
+    except Exception:
+        try:
+            data = request.form.to_dict(flat=True)
+        except:
+            return  {'response':"Request body or form missing"}, 400
+
+    print(data)
+
+    if "sound" in data:
+        soundId = data["sound"]
+
+        conn = get_db_connection()
+        try:
+            soundUri = conn.execute(f'SELECT sound_uri FROM sounds WHERE id={soundId}').fetchone()[0]
+            thumbUri = conn.execute(f'SELECT thumb_uri FROM sounds WHERE id={soundId}').fetchone()[0]
+            conn.execute(f'DELETE FROM sounds WHERE id={soundId}')
+        except TypeError:
+            conn.commit()
+            conn.close()
+            return  {'response':'File not found'}, 404
+
+        conn.commit()
+        conn.close()
+
+        try:
+            remove(clips_dir + soundUri)
+            remove(thumb_dir + thumbUri)
+        except FileNotFoundError:
+            # It is Ok if the files have already been deleted
+            pass
+
+        return  {'response':'sound deleted'}, 200
+
+
+    else:
+        return  {'response':'No sound specified to delete'}, 400
