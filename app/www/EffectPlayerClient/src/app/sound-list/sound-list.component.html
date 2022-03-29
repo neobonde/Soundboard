@@ -1,0 +1,31 @@
+<div class="container-fluid mx-auto w-80 mt-1" [hidden]="loading">
+  <div class="row row-cols-auto">
+
+    <ng-template ngFor [ngForOf]="sounds" let-sound>
+      <app-sound-card class="p-0"
+      [title]="sound.title"
+      [thumbUri]="sound.thumb_uri"
+      [soundUri]="sound.sound_uri"
+      [id]="sound.id"
+      ></app-sound-card>
+    </ng-template>
+
+    <button matRipple class="m-1 card align-items-center text-dark bg-light" name="sound" style="width: 164px;" (click)="openUploadModal()">
+      <i class="bi bi-cloud-plus-fill" style="font-size: 65px; color: #d94747;"></i>
+      <div class="card-body p-1 d-flex">
+        <h6 class="card-title text-center m-auto">Add Sound</h6>
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- Loading view -->
+<div *ngIf="loading" class="vh-40 d-flex justify-content-center align-items-center" [hidden]="!loading">
+  <div class="boxContainer">
+    <div class="box box-q"></div>
+    <div class="box box-l"></div>
+    <div class="box box-q"></div>
+    <div class="box box-l"></div>
+    <div class="box box-q"></div>
+  </div>
+</div>

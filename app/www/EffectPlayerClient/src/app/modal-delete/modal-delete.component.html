@@ -1,0 +1,10 @@
+<div class="modal-header">
+    <h4 class="modal-title">Are you sure?</h4>
+  </div>
+  <div class="modal-body">
+    <p>Do you really want to delete the sound: "<b>{{title}}</b>"? This action cannot be undone.</p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="activeModal.close('Cancel click')">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="onDelete()">Delete</button>
+  </div>

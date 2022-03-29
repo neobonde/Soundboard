@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h4 class="modal-title">Upload sound</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+<div class="modal-body needs-validation">
+  <!-- <input type="file" class="file-input" accept=".ogg" (change)="onFileSelected($event)" #fileUpload> -->
+
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Sound file</label>
+    <input class="form-control" type="file" id="formFile" accept=".ogg" (change)="onFileSelected($event)" [ngClass]="fileValidClass">
+    <div class="invalid-feedback">
+      Please choose a .OGG file.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Sound name</label>
+    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Effect name"
+      [(ngModel)]="soundTitle" [ngClass]="titleValidClass">
+    <div class="invalid-feedback">
+      Please choose a name.
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <!-- <button type="button" class="btn btn-outline-danger" (click)="activeModal.close('Cancel click')">Cancel</button> -->
+  <button type="button" class="btn btn-outline-success" (click)="upload()" [disabled]="uploading">
+    <span *ngIf="uploading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span *ngIf="uploading"> Loading...</span>
+    <span *ngIf="!uploading">Upload</span>
+  </button>
+</div>

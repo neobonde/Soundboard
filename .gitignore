@@ -1,0 +1,13 @@
+app/database/sounds/*
+!app/database/sounds/.gitkeep
+app/database/thumbnails/*
+!app/database/thumbnails/.gitkeep
+app/database/database.db
+
+*__pycache__*
+*.pyc
+temp.wav
+app/www/static/*
+!app/www/static/.gitkeep
+app/www/template/*
+!app/www/template/.gitkeep

@@ -1,0 +1,31 @@
+<div class="container border rounded bg-light mt-2" style="width:30rem; padding: 0.2rem 1rem">
+
+  <div class="row">
+    <div class="col">
+      <div class="row ">
+        <h6>Sound Controls</h6>
+      </div>
+      <div class="row ">
+        <label for="customRange2" class="form-label col-auto">Volume:</label>
+        <input type="range" class="form-range col" min="0" max="100" id="customRange2" [(ngModel)]="volumeService.volume">
+        <label for="customRange2" class="form-label col-3" >{{volumeService.volume}}%</label>
+      </div>
+      <div class="row mt-2">
+        <button class="btn btn-danger btn-sm" (click)="stopAll()">Stop All</button>
+      </div>
+    </div>
+    <div class="col ml-2">
+      <div class="row ">
+        <h6>TV Controls</h6>
+      </div>
+      <div class="row justify-content-center" >
+        <div class="btn-group w-75 " role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-danger" (click)="tvOff()" >Off</button>
+            <button type="button" class="btn btn-outline-success" (click)="tvOn()">On</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
