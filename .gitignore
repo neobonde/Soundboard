@@ -9,5 +9,5 @@ app/database/database.db
 temp.wav
 app/www/static/*
 !app/www/static/.gitkeep
-app/www/template/*
-!app/www/template/.gitkeep
+app/www/templates/*
+!app/www/templates/.gitkeep
