@@ -6,6 +6,7 @@ from pathlib import Path
 os.chdir(Path('app/www/EffectPlayerClient'))
 os.system('pwd')
 print("##### Building Angular")
+os.system('npm install')
 os.system('ng build --output-hashing none --base-href /static/')
 os.chdir(Path('../../..'))
 os.system('pwd')
