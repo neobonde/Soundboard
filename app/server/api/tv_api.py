@@ -3,30 +3,32 @@ from os.path import join, isfile, abspath,dirname
 from flask import Blueprint, abort, json, request
 import subprocess
 import schedule
+import time
 
 
 
 tv_api = Blueprint('tv_api', __name__)
 
 def tv_on():
+    print("tv_on")
     command = "echo 'on 0' | cec-client -s -d 1"
     process = subprocess.run(command, shell=True, check=True)
 
 def tv_off():
+    print("tv_off")
     command = "echo 'standby 0' | cec-client -s -d 1"
     process = subprocess.run(command, shell=True, check=True)
 
 @tv_api.route('/api/v1/tv_on',methods=['POST'])
 def tv_on_route():
-    print("tv_on")
     tv_on()
     return json.dumps({"success": True}), 201
 
 @tv_api.route('/api/v1/tv_off',methods=['POST'])
 def tv_off_route():
-    print("tv_off")
     tv_off()
     return json.dumps({"success": True}), 201
+
 
 
 def setTvSchedule(onTime="08:00", offTime="15:44", days=["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]):
@@ -61,3 +63,13 @@ def setTvSchedule(onTime="08:00", offTime="15:44", days=["MONDAY", "TUESDAY", "W
     if "SUNDAY" in (day.upper() for day in days):
         schedule.every().sunday.at(onTime).do(tv_on)
         schedule.every().sunday.at(offTime).do(tv_off)
+
+
+    print(schedule.get_jobs())
+
+
+def tv_scheduler():
+    while True:
+        # print("Checking schedule")
+        schedule.run_pending()
+        time.sleep(30)

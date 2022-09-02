@@ -17,19 +17,19 @@ export class SoundControlsComponent implements OnInit {
   }
 
   stopAll(): void {
-    this.http.post<any>('/api/v1/stop', {}).subscribe(data => {
+    this.http.post<null>('/api/v1/stop', null).subscribe(data => {
       console.log(data);
     })
   }
 
   tvOff(): void {
-    this.http.post<any>('/api/v1/tv_off', {}).subscribe(data => {
+    this.http.post<null>('/api/v1/tv_off', null).subscribe(data => {
       console.log(data);
     })
   }
 
   tvOn(): void {
-    this.http.post<any>('/api/v1/tv_on', {}).subscribe(data => {
+    this.http.post<null>('/api/v1/tv_on', null).subscribe(data => {
       console.log(data);
     })
   }
