@@ -56,9 +56,6 @@ def add_header(r):
     and also to cache the rendered page for 10 minutes.
     """
 
-    print(r)
-    print("Hello headers")
-
     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
     r.headers["Pragma"] = "no-cache"
     r.headers["Expires"] = "0"
@@ -96,9 +93,7 @@ def upload_sound():
         else:
             return {'response':'Unsupported file format, only accepts .OGG'}, 415
 
-
-            return redirect(url_for('upload_api.upload_file', name=sound_uri))
-    return '', 204
+    return {'response':'sound uploaded'}, 204
 
 @upload_api.route('/api/v1/rename', methods=['POST'])
 def rename_sound():

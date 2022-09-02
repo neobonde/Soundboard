@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { delay, retry } from 'rxjs';
 import { ImgLoadService } from '../img-load.service';
 import { LoadControlService } from '../load-control.service';
 import { ModalUploadComponent } from '../modal-upload/modal-upload.component';
@@ -34,11 +35,9 @@ export class SoundListComponent implements OnInit {
     this.loadService.loadSounds()
 
     this.imgLoader.imagesLoading$.subscribe(data => {
-      // console.log('Loading images: ' + data)
       if (data <= 1) {
         this.timeout = setTimeout(() => {
           clearTimeout(this.timeout);
-          // console.log("load timeout")
           this.loading = false;
         }, 1000)
       }
@@ -50,7 +49,6 @@ export class SoundListComponent implements OnInit {
       if (data <= 0) {
         clearTimeout(this.timeout);
         this.loading = false;
-        // console.log("Loading done!")
       } else {
         this.loading = true;
       }
@@ -61,7 +59,11 @@ export class SoundListComponent implements OnInit {
   private loadSounds()
   {
     this.loading = true;
-    this.http.get('/api/v1/get-sounds').subscribe(data => {
+    this.http.get('/api/v1/get-sounds')
+    .pipe(
+      retry(3),
+      delay(1000)
+    ).subscribe(data => {
       this.sounds = data as []
       console.log(data)
       if (this.sounds.length == 0) {
