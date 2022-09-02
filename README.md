@@ -10,19 +10,36 @@ In the `app/database/` folder execute the `init_db.py` script, this will initial
 
 ### Building the backend
 
-Backend is based on python 3.x, running a flask webserver. It requires these packages to run:
+Backend is based on python 3.x, running a flask webserver.   
 
-* flask
-* matplotlib
-* pygame
-* pydub
-* numpy
-* Werkzeug
-* schedule
+To install the backend install python env
 
- > TODO: Make a python env, to make installation easier!
+```$ python -m pip install virtualenv```
 
-```$ python -m pip install flask matplotlib pygame pydub numpy Werkzeug schedule```
+Now create a python virtual enviorenment in the root of this project
+
+```$ python -m venv env```
+
+> You can choose your own nave for the virtual environment folder, but only env is ignored in the .gitignore
+
+Now activate the `venv`
+
+```$ source env/bin/activate```
+
+Now lets install the required packages from `requirements.txt`
+
+```$ pip install -r requirements.txt ```
+
+And that is it the backend requrements has been installed
+
+Lastly if the database has not been initialized before run these commands
+
+```
+$ cd app/database
+$ python init_db.py
+$ cd ../..
+```
+
 
 ### Building the frontend
 
