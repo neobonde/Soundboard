@@ -11,3 +11,5 @@ app/www/static/*
 !app/www/static/.gitkeep
 app/www/templates/*
 !app/www/templates/.gitkeep
+
+env/*
